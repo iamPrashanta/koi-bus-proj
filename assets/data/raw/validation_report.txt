@@ -1,0 +1,22 @@
+=== KOI BUS TRANSIT DATA VALIDATION REPORT ===
+
+Total Stops Indexed: 904
+Total Route Definitions: 2
+
+Potential Duplicate Stops Detected: 10 groups
+ - 'Unnamed Bus Stop' appears 78 times
+ - 'WBTC/SBSTC Stand' appears 6 times
+ - 'Kankurgachi' appears 6 times
+ - 'Sector - V' appears 5 times
+ - 'Ranichak' appears 5 times
+ - 'Phoolbagan' appears 5 times
+ - 'Gariahat' appears 5 times
+ - 'Ruby' appears 4 times
+ - 'Kathgola' appears 4 times
+ - 'College Street' appears 4 times
+
+Stops with Invalid Coordinates (0,0): 0
+
+Routes with less than 2 stops: 0
+
+Total Traversable Graph Edges: 6

@@ -1,0 +1,9 @@
+route_id,stop_name,stop_sequence,distance_from_start
+route_ac44,Esplanade Bus Terminus,1,0.0
+route_ac44,Howrah Station,2,3.5
+route_ac44,Santragachi,3,10.2
+route_ac44,Andul,4,15.0
+route_s12,Howrah Station,1,0.0
+route_s12,Kankurgachi,2,6.0
+route_s12,Karunamoyee,3,10.0
+route_s12,Newtown,4,14.5

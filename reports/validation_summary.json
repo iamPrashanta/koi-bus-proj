@@ -1,0 +1,9 @@
+{
+    "total_stops": 904,
+    "total_routes": 2,
+    "total_graph_edges": 6,
+    "districts_mapped": 1,
+    "duplicate_stop_groups": 140,
+    "missing_coordinates": 0,
+    "routes_with_less_than_2_stops": 0
+}
