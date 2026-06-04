@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 import '../../providers/providers.dart';
 
 class BasicPlannerScreen extends ConsumerWidget {
@@ -65,10 +64,10 @@ class BasicPlannerScreen extends ConsumerWidget {
                   itemBuilder: (context, index) {
                     final r = routes[index];
                     return ListTile(
-                      leading: Icon(LucideIcons.bus, color: Theme.of(context).primaryColor),
+                      leading: Icon(Icons.directions_bus, color: Theme.of(context).primaryColor),
                       title: Text(r['short_name'], style: const TextStyle(fontWeight: FontWeight.bold)),
                       subtitle: Text(r['long_name']),
-                      trailing: const Icon(LucideIcons.chevronRight),
+                      trailing: const Icon(Icons.chevron_right),
                       onTap: () => context.push('/route/${r['id']}'),
                     );
                   },

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 import '../../providers/providers.dart';
 
 class DatabaseHealthScreen extends ConsumerWidget {
@@ -19,9 +18,9 @@ class DatabaseHealthScreen extends ConsumerWidget {
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              _buildStatCard(context, 'Data Version', data['data_version'] ?? 'Unknown', LucideIcons.database),
-              _buildStatCard(context, 'OSM Version', data['osm_version'] ?? 'Unknown', LucideIcons.map),
-              _buildStatCard(context, 'Route CSV Version', data['route_version'] ?? 'Unknown', LucideIcons.fileText),
+              _buildStatCard(context, 'Data Version', data['data_version'] ?? 'Unknown', Icons.storage),
+              _buildStatCard(context, 'OSM Version', data['osm_version'] ?? 'Unknown', Icons.map),
+              _buildStatCard(context, 'Route CSV Version', data['route_version'] ?? 'Unknown', Icons.description),
               const SizedBox(height: 16),
               Row(
                 children: [

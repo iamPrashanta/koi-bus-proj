@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 import '../../providers/providers.dart';
 
 class SearchScreen extends ConsumerStatefulWidget {
@@ -37,7 +36,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
         actions: [
           if (_query.isNotEmpty)
             IconButton(
-              icon: const Icon(LucideIcons.x),
+              icon: const Icon(Icons.close),
               onPressed: () {
                 _controller.clear();
                 setState(() {
@@ -52,7 +51,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(LucideIcons.search, size: 64, color: Colors.grey.shade300),
+                  Icon(Icons.search, size: 64, color: Colors.grey.shade300),
                   const SizedBox(height: 16),
                   Text(
                     'Search for any stop across West Bengal',
@@ -73,7 +72,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                     return ListTile(
                       leading: CircleAvatar(
                         backgroundColor: Theme.of(context).primaryColor.withOpacity(0.1),
-                        child: Icon(LucideIcons.mapPin, color: Theme.of(context).primaryColor),
+                        child: Icon(Icons.location_on, color: Theme.of(context).primaryColor),
                       ),
                       title: Text(stop['name'], style: const TextStyle(fontWeight: FontWeight.bold)),
                       subtitle: Text(stop['district'] ?? 'Unknown District'),

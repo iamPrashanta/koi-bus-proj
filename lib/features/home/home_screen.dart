@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -38,7 +37,7 @@ class HomeScreen extends StatelessWidget {
                   CircleAvatar(
                     radius: 24,
                     backgroundColor: Theme.of(context).colorScheme.surface,
-                    child: const Icon(LucideIcons.user),
+                    child: const Icon(Icons.person),
                   ),
                 ],
               ),
@@ -63,7 +62,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      const Icon(LucideIcons.search, color: Colors.grey),
+                      const Icon(Icons.search, color: Colors.grey),
                       const SizedBox(width: 12),
                       Text(
                         'Search stops...',
@@ -79,10 +78,10 @@ class HomeScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  _QuickAction(icon: LucideIcons.home, label: 'Home', onTap: () {}),
-                  _QuickAction(icon: LucideIcons.briefcase, label: 'Work', onTap: () {}),
-                  _QuickAction(icon: LucideIcons.star, label: 'Saved', onTap: () {}),
-                  _QuickAction(icon: LucideIcons.mapPin, label: 'Nearby', onTap: () {}),
+                  _QuickAction(icon: Icons.home, label: 'Home', onTap: () {}),
+                  _QuickAction(icon: Icons.work, label: 'Work', onTap: () {}),
+                  _QuickAction(icon: Icons.star, label: 'Saved', onTap: () {}),
+                  _QuickAction(icon: Icons.location_on, label: 'Nearby', onTap: () {}),
                 ],
               ),
             ],

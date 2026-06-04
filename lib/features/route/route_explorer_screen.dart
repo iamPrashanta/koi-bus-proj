@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 import '../../providers/providers.dart';
 
 class RouteExplorerScreen extends ConsumerWidget {
@@ -35,7 +34,7 @@ class RouteExplorerScreen extends ConsumerWidget {
                   ),
                   title: Text(r['long_name'], style: const TextStyle(fontWeight: FontWeight.w500)),
                   subtitle: Text(r['operator_name'] ?? 'Unknown Operator'),
-                  trailing: const Icon(LucideIcons.chevronRight),
+                  trailing: const Icon(Icons.chevron_right),
                   onTap: () => context.push('/route/${r['id']}'),
                 ),
               );

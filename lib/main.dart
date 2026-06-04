@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 
 import 'core/theme/app_theme.dart';
 import 'features/home/home_screen.dart';
@@ -11,6 +10,7 @@ import 'features/route/route_explorer_screen.dart';
 import 'features/route/route_detail_screen.dart';
 import 'features/planner/basic_planner_screen.dart';
 import 'features/settings/database_health_screen.dart';
+import 'features/startup/startup_screen.dart';
 
 void main() {
   runApp(const ProviderScope(child: KoiBusApp()));
@@ -21,7 +21,7 @@ final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
 final _router = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: '/',
+  initialLocation: '/startup',
   routes: [
     ShellRoute(
       navigatorKey: _shellNavigatorKey,
@@ -35,10 +35,10 @@ final _router = GoRouter(
             unselectedItemColor: Colors.grey,
             type: BottomNavigationBarType.fixed,
             items: const [
-              BottomNavigationBarItem(icon: Icon(LucideIcons.home), label: 'Home'),
+              BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
               BottomNavigationBarItem(icon: Icon(Icons.route), label: 'Planner'),
-              BottomNavigationBarItem(icon: Icon(LucideIcons.map), label: 'Explorer'),
-              BottomNavigationBarItem(icon: Icon(LucideIcons.database), label: 'DB Health'),
+              BottomNavigationBarItem(icon: Icon(Icons.map), label: 'Explorer'),
+              BottomNavigationBarItem(icon: Icon(Icons.storage), label: 'DB Health'),
             ],
           ),
         );
@@ -61,6 +61,10 @@ final _router = GoRouter(
           builder: (context, state) => const DatabaseHealthScreen(),
         ),
       ],
+    ),
+    GoRoute(
+      path: '/startup',
+      builder: (context, state) => const StartupScreen(),
     ),
     GoRoute(
       path: '/search',

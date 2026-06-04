@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 import '../../providers/providers.dart';
 
 class StopDetailScreen extends ConsumerWidget {
@@ -43,7 +42,7 @@ class StopDetailScreen extends ConsumerWidget {
                     const SizedBox(height: 8),
                     Row(
                       children: [
-                        const Icon(LucideIcons.mapPin, color: Colors.white70, size: 16),
+                        const Icon(Icons.location_on, color: Colors.white70, size: 16),
                         const SizedBox(width: 8),
                         Text(
                           stop['district'] ?? 'Unknown District',
@@ -73,11 +72,11 @@ class StopDetailScreen extends ConsumerWidget {
                             child: ListTile(
                               leading: CircleAvatar(
                                 backgroundColor: Theme.of(context).colorScheme.secondary.withOpacity(0.2),
-                                child: Icon(LucideIcons.bus, color: Theme.of(context).colorScheme.secondary),
+                                child: Icon(Icons.directions_bus, color: Theme.of(context).colorScheme.secondary),
                               ),
                               title: Text(r['short_name'], style: const TextStyle(fontWeight: FontWeight.bold)),
                               subtitle: Text(r['long_name']),
-                              trailing: const Icon(LucideIcons.chevronRight),
+                              trailing: const Icon(Icons.chevron_right),
                               onTap: () => context.push('/route/${r['id']}'),
                             ),
                           );

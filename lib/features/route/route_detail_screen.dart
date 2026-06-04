@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 import '../../providers/providers.dart';
 
 class RouteDetailScreen extends ConsumerWidget {
@@ -73,7 +72,7 @@ class RouteDetailScreen extends ConsumerWidget {
                     return ListTile(
                       leading: Column(
                         children: [
-                          Icon(LucideIcons.circle, size: 12, color: Theme.of(context).primaryColor),
+                          Icon(Icons.circle, size: 12, color: Theme.of(context).primaryColor),
                           if (index != stops.length - 1)
                             Expanded(child: Container(width: 2, color: Theme.of(context).primaryColor.withOpacity(0.3))),
                         ],
