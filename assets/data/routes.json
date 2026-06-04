@@ -1,0 +1,46 @@
+{
+  "stops": [
+    {"id": "s1", "name": "Esplanade", "nameBn": "এসপ্লানেড", "lat": 22.5646, "lng": 88.3516, "zone": "Kolkata"},
+    {"id": "s2", "name": "Howrah Station", "nameBn": "হাওড়া স্টেশন", "lat": 22.5833, "lng": 88.3422, "zone": "Howrah"},
+    {"id": "s3", "name": "BBD Bagh", "nameBn": "বিবিডি বাগ", "lat": 22.5714, "lng": 88.3496, "zone": "Kolkata"},
+    {"id": "s4", "name": "Park Street", "nameBn": "পার্ক স্ট্রিট", "lat": 22.5532, "lng": 88.3526, "zone": "Kolkata"},
+    {"id": "s5", "name": "Garia", "nameBn": "গড়িয়া", "lat": 22.4645, "lng": 88.3970, "zone": "Kolkata"},
+    {"id": "s6", "name": "Salt Lake Sec V", "nameBn": "সল্টলেক সেক্টর ৫", "lat": 22.5816, "lng": 88.4326, "zone": "Bidhannagar"},
+    {"id": "s7", "name": "Karunamoyee", "nameBn": "করুণাময়ী", "lat": 22.5855, "lng": 88.4192, "zone": "Bidhannagar"},
+    {"id": "s8", "name": "Airport", "nameBn": "এয়ারপোর্ট", "lat": 22.6450, "lng": 88.4410, "zone": "North Kolkata"}
+  ],
+  "routes": [
+    {
+      "id": "r1",
+      "number": "AC-44",
+      "name": "Esplanade ↔ Howrah",
+      "operator": "WBTC",
+      "type": "AC",
+      "stops": ["s1", "s3", "s2"]
+    },
+    {
+      "id": "r2",
+      "number": "S-12",
+      "name": "Garia ↔ Howrah",
+      "operator": "CSTC",
+      "type": "NON-AC",
+      "stops": ["s5", "s4", "s1", "s3", "s2"]
+    },
+    {
+      "id": "r3",
+      "number": "230",
+      "name": "Salt Lake ↔ Esplanade",
+      "operator": "WBTC",
+      "type": "NON-AC",
+      "stops": ["s6", "s7", "s1"]
+    },
+    {
+      "id": "r4",
+      "number": "AC-22",
+      "name": "Airport ↔ Howrah",
+      "operator": "WBTC",
+      "type": "AC",
+      "stops": ["s8", "s7", "s1", "s2"]
+    }
+  ]
+}
