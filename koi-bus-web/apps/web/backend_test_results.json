@@ -1,0 +1,63 @@
+[
+  {
+    "endpoint": "POST /api/auth/signup",
+    "status": 400,
+    "request": {
+      "email": "test1782286269533@example.com",
+      "password": "password123",
+      "firstName": "Test",
+      "lastName": "User",
+      "phone": "1234567890",
+      "role": "DRIVER"
+    },
+    "response": {
+      "success": false,
+      "error": "Phone number already registered"
+    }
+  },
+  {
+    "endpoint": "GET /api/auth/me",
+    "status": 401,
+    "request": null,
+    "response": {
+      "success": false,
+      "error": "Unauthorized: Token expired or invalid"
+    }
+  },
+  {
+    "endpoint": "POST /api/auth/refresh",
+    "status": 401,
+    "request": {},
+    "response": {
+      "success": false,
+      "error": "Refresh token missing"
+    }
+  },
+  {
+    "endpoint": "POST /api/auth/logout",
+    "status": 200,
+    "request": {},
+    "response": {
+      "success": true
+    }
+  },
+  {
+    "endpoint": "POST /api/auth/login",
+    "status": 200,
+    "request": {
+      "phone": "1234567890",
+      "password": "password123"
+    },
+    "response": {
+      "success": true,
+      "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJEUklWRVIiLCJpYXQiOjE3ODIyODYyNjksImV4cCI6MTc4MjI4NzE2OX0.OsYCtUd6Gz1xq7F31w8SADmAuwsJKzoucCU5EchPINM",
+      "user": {
+        "id": 1,
+        "phone": "1234567890",
+        "role": "DRIVER",
+        "firstName": "Test",
+        "lastName": "User"
+      }
+    }
+  }
+]
