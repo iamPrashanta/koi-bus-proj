@@ -1,0 +1,6 @@
+# Local Pub Cache for Flutter
+/pub-cache/
+pub-cache/
+
+# General
+.DS_Store

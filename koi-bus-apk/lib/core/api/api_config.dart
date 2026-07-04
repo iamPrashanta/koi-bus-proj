@@ -6,9 +6,7 @@ class ApiConfig {
   // Use localhost for iOS simulator.
   // For physical devices, you will need to change this to your computer's local IP address (e.g., 192.168.1.X)
   static String get _host {
-    if (kIsWeb) return 'http://localhost';
-    if (Platform.isAndroid) return 'http://10.0.2.2';
-    return 'http://localhost';
+    return 'http://192.168.1.5'; // Physical Wi-Fi network IP for testing
   }
 
   static String get baseUrl => '$_host:4000';
