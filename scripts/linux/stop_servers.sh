@@ -30,4 +30,23 @@ if [ -f .server_pids ]; then
   rm .server_pids 2>/dev/null
 fi
 
+echo "Stopping Database Containers (Docker/Podman)..."
+cd ../../koi-bus-web
+CONTAINER_ENGINE=""
+if command -v docker &> /dev/null; then
+    CONTAINER_ENGINE="docker"
+elif command -v podman &> /dev/null; then
+    CONTAINER_ENGINE="podman"
+fi
+
+if [ -n "$CONTAINER_ENGINE" ]; then
+    if command -v docker-compose &> /dev/null; then
+        docker-compose down 2>/dev/null
+    else
+        $CONTAINER_ENGINE compose down 2>/dev/null
+    fi
+else
+    echo "No Docker or Podman found. Skipping container shutdown."
+fi
+
 echo "All servers successfully stopped."

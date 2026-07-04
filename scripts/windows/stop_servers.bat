@@ -28,4 +28,21 @@ for /f "tokens=5" %%a in ('netstat -aon ^| find ":8002" ^| find "LISTENING"') do
 )
 
 echo.
-echo All ports are successfully cleared!
+echo Stopping Database Containers (Docker/Podman)...
+cd ..\..\koi-bus-web
+set CONTAINER_ENGINE=
+where docker >nul 2>&1
+if %errorlevel% equ 0 set CONTAINER_ENGINE=docker
+if "%CONTAINER_ENGINE%"=="" (
+    where podman >nul 2>&1
+    if %errorlevel% equ 0 set CONTAINER_ENGINE=podman
+)
+
+if not "%CONTAINER_ENGINE%"=="" (
+    %CONTAINER_ENGINE% compose down
+) else (
+    echo No Docker or Podman found. Skipping container shutdown.
+)
+
+echo.
+echo All ports are successfully cleared and containers stopped!
