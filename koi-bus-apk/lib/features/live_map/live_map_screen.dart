@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 import '../../core/api/socket_service.dart';
+import '../../core/api/api_config.dart';
+import '../../core/api/cached_tile_provider.dart';
 
 class LiveMapScreen extends StatefulWidget {
   const LiveMapScreen({Key? key}) : super(key: key);
@@ -32,38 +36,39 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Live Buses')),
-      body: _liveBuses.isEmpty
-          ? const Center(
-              child: Text(
-                'Waiting for live telemetry...',
-                style: TextStyle(color: Colors.grey, fontSize: 16),
-              ),
-            )
-          : ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: _liveBuses.length,
-              itemBuilder: (context, index) {
-                final busId = _liveBuses.keys.elementAt(index);
-                final busData = _liveBuses[busId]!;
-                
-                return Card(
-                  margin: const EdgeInsets.only(bottom: 12),
-                  child: ListTile(
-                    leading: const CircleAvatar(
-                      backgroundColor: Colors.blue,
-                      child: Icon(Icons.directions_bus, color: Colors.white),
-                    ),
-                    title: Text('Bus $busId'),
-                    subtitle: Text(
-                        'Lat: ${busData['lat']?.toStringAsFixed(4) ?? 'N/A'}, '
-                        'Lng: ${busData['lng']?.toStringAsFixed(4) ?? 'N/A'}\n'
-                        'Speed: ${busData['speed']?.toStringAsFixed(1) ?? '0'} km/h'),
-                    isThreeLine: true,
-                  ),
-                );
-              },
-            ),
+      appBar: AppBar(title: const Text('Live Buses Map')),
+      body: FlutterMap(
+        options: MapOptions(
+          initialCenter: const LatLng(23.5, 87.5), // Center on West Bengal
+          initialZoom: 9.0,
+        ),
+        children: [
+          TileLayer(
+            // Point to the Node.js API tile server
+            urlTemplate: '${ApiConfig.baseUrl}/api/maps/tiles/{z}/{x}/{y}.png',
+            userAgentPackageName: 'com.antigravity.koibus',
+            tileProvider: const CachedTileProvider(),
+          ),
+          MarkerLayer(
+            markers: _liveBuses.values.map((busData) {
+              final lat = busData['lat'] as double?;
+              final lng = busData['lng'] as double?;
+              if (lat == null || lng == null) return null;
+
+              return Marker(
+                point: LatLng(lat, lng),
+                width: 40,
+                height: 40,
+                child: const Icon(
+                  Icons.directions_bus,
+                  color: Colors.blue,
+                  size: 32,
+                ),
+              );
+            }).whereType<Marker>().toList(),
+          ),
+        ],
+      ),
     );
   }
 }

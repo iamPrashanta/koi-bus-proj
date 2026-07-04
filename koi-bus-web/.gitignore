@@ -44,13 +44,6 @@ dump.rdb
 redis-data/
 postgres-data/
 
-# ── Transport data (raw CSVs are large) ───────────────────────
-transport-data/**/*.csv
-!transport-data/metadata/
-
 # ── IDE & Editor ──────────────────────────────────────────────
-.vscode/
-.idea/
-.gemini/
 *.swp
 *.swo

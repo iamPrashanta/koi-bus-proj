@@ -42,6 +42,7 @@ import { faresApi } from './modules/fares/fare.routes';
 import { busesApi } from './modules/buses/bus.routes';
 import { authRoutes } from './modules/auth/auth.routes';
 import { telemetryRoutes } from './modules/telemetry/telemetry.routes';
+import mapsRoutes from './modules/maps/maps.routes';
 
 import { adminRoutes } from './modules/admin/admin.routes';
 import { operatorRoutes } from './modules/operators/operator.routes';
@@ -52,6 +53,7 @@ import { driverRoutes } from './modules/driver/driver.routes';
 app.use('/api/auth', authRoutes);
 app.use('/api/telemetry', telemetryRoutes);
 app.use('/api/search', searchRoutes);
+app.use('/api/maps', mapsRoutes);
 app.use('/api/routes', routesApi);
 app.use('/api/stops', stopsApi);
 app.use('/api/trips', tripsApi);

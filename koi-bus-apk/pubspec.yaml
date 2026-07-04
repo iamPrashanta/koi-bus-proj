@@ -37,6 +37,10 @@ dependencies:
   collection: ^1.19.1
   geolocator: ^14.0.2
   flutter_native_splash: ^2.4.8
+  flutter_map: ^8.3.1
+  latlong2: ^0.10.1
+  cached_network_image: ^3.4.1
+  flutter_cache_manager: ^3.4.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
