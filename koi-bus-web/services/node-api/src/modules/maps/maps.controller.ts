@@ -45,9 +45,9 @@ export const getTile = (req: Request, res: Response) => {
   }
 
   // MBTiles uses TMS coordinates (Y is flipped)
-  const zoom = parseInt(z);
-  const col = parseInt(x);
-  const row = (Math.pow(2, zoom) - 1) - parseInt(y);
+  const zoom = parseInt(z as string);
+  const col = parseInt(x as string);
+  const row = (Math.pow(2, zoom) - 1) - parseInt(y as string);
 
   try {
     const stmt = db.prepare('SELECT tile_data FROM tiles WHERE zoom_level = ? AND tile_column = ? AND tile_row = ?');

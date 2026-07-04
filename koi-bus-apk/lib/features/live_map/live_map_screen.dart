@@ -47,7 +47,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
             // Point to the Node.js API tile server
             urlTemplate: '${ApiConfig.baseUrl}/api/maps/tiles/{z}/{x}/{y}.png',
             userAgentPackageName: 'com.antigravity.koibus',
-            tileProvider: const CachedTileProvider(),
+            tileProvider: CachedTileProvider(),
           ),
           MarkerLayer(
             markers: _liveBuses.values.map((busData) {

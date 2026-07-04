@@ -60,8 +60,8 @@ export default function LeafletMap({
 
           // Assuming route.stops have lat/lng
           const positions: [number, number][] = route.stops.map(s => [
-            s.latitude || 23.5, 
-            s.longitude || 87.5
+            s.lat || 23.5, 
+            s.lng || 87.5
           ]);
 
           return (
@@ -80,21 +80,22 @@ export default function LeafletMap({
 
         {/* Draw Buses */}
         {buses.map((bus) => {
-          if (!bus.latitude || !bus.longitude) return null;
+          if (!bus.telemetryHistory || bus.telemetryHistory.length === 0) return null;
+          const latest = bus.telemetryHistory[bus.telemetryHistory.length - 1];
           const isSelected = selectedBusId === bus.id;
 
           return (
             <Marker
               key={bus.id}
-              position={[bus.latitude, bus.longitude]}
+              position={[latest.lat, latest.lng]}
               icon={busIcon}
               eventHandlers={{
                 click: () => onSelectBus(bus.id)
               }}
             >
               <Popup>
-                <div className="font-semibold text-gray-900">{bus.plateNumber}</div>
-                <div className="text-sm text-gray-500">Speed: {bus.speed} km/h</div>
+                <div className="font-semibold text-gray-900">{bus.licensePlate}</div>
+                <div className="text-sm text-gray-500">Speed: {latest.speed || bus.speed} km/h</div>
               </Popup>
             </Marker>
           );
