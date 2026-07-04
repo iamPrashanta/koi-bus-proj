@@ -1,0 +1,32 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Durgapur to Karunamoyee",
+        "description": "Intercity bus route from Durgapur Bus Stand to Karunamoyee (Salt Lake, Kolkata)"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [87.3167, 23.5186],
+          [87.3367, 23.5120],
+          [87.3567, 23.4980],
+          [87.4250, 23.4680],
+          [87.5250, 23.4180],
+          [87.6250, 23.3680],
+          [87.7250, 23.3180],
+          [87.8250, 23.2680],
+          [87.9250, 23.2180],
+          [88.0250, 23.1680],
+          [88.1250, 23.1180],
+          [88.2250, 23.0680],
+          [88.3100, 22.6820],
+          [88.4200, 22.5850],
+          [88.4262, 22.5815]
+        ]
+      }
+    }
+  ]
+}

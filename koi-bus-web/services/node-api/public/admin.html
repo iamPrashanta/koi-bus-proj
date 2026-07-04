@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Koi Bus - Admin Monitoring</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; padding: 20px; background-color: #f5f5f5; }
+    h1 { margin-bottom: 20px; }
+    .stats-container { display: flex; gap: 20px; margin-bottom: 30px; }
+    .stat-box { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); flex: 1; text-align: center; }
+    .stat-box h3 { margin: 0 0 10px 0; color: #666; font-size: 14px; text-transform: uppercase; }
+    .stat-box .value { font-size: 32px; font-weight: bold; color: #2c3e50; }
+    table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
+    th { background-color: #f8f9fa; font-weight: 600; color: #333; }
+    tr:last-child td { border-bottom: none; }
+    .status { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
+    .status.ongoing { background: #d4edda; color: #155724; }
+  </style>
+</head>
+<body>
+
+  <h1>Admin Monitoring</h1>
+  
+  <div class="stats-container">
+    <div class="stat-box">
+      <h3>Connected Drivers</h3>
+      <div class="value" id="val-drivers">0</div>
+    </div>
+    <div class="stat-box">
+      <h3>Active Trips</h3>
+      <div class="value" id="val-trips">0</div>
+    </div>
+    <div class="stat-box">
+      <h3>Active Buses</h3>
+      <div class="value" id="val-buses">0</div>
+    </div>
+    <div class="stat-box">
+      <h3>Redis Keys</h3>
+      <div class="value" id="val-keys">0</div>
+    </div>
+  </div>
+
+  <h2>Latest Coordinates</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Trip ID</th>
+        <th>Status</th>
+        <th>Lat</th>
+        <th>Lng</th>
+        <th>Speed (km/h)</th>
+      </tr>
+    </thead>
+    <tbody id="trips-tbody">
+      <tr><td colspan="5" style="text-align: center;">Loading...</td></tr>
+    </tbody>
+  </table>
+
+  <script>
+    async function fetchStats() {
+      try {
+        const response = await fetch('/api/admin/stats');
+        const { data } = await response.json();
+        
+        document.getElementById('val-drivers').innerText = data.stats.connectedDrivers;
+        document.getElementById('val-trips').innerText = data.activeTrips.length;
+        document.getElementById('val-buses').innerText = data.stats.activeBuses;
+        document.getElementById('val-keys').innerText = data.stats.redisKeys;
+        
+        const tbody = document.getElementById('trips-tbody');
+        tbody.innerHTML = '';
+        
+        if (data.activeTrips.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">No active trips</td></tr>';
+          return;
+        }
+
+        data.activeTrips.forEach(trip => {
+          const tr = document.createElement('tr');
+          const statusClass = trip.status.toLowerCase() === 'ongoing' ? 'ongoing' : '';
+          tr.innerHTML = `
+            <td>#${trip.id}</td>
+            <td><span class="status ${statusClass}">${trip.status}</span></td>
+            <td>${trip.lat.toFixed(5)}</td>
+            <td>${trip.lng.toFixed(5)}</td>
+            <td>${trip.speed.toFixed(1)}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (err) {
+        console.error('Failed to fetch stats', err);
+      }
+    }
+
+    // Initial fetch
+    fetchStats();
+    // Poll every 2 seconds
+    setInterval(fetchStats, 2000);
+  </script>
+</body>
+</html>

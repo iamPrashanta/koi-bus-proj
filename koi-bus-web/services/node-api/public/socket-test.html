@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Koi Bus Socket.IO Demo</title>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <style>
+        body { font-family: monospace; background: #1e1e1e; color: #fff; padding: 20px; }
+        .controls { margin-bottom: 20px; }
+        input, button { padding: 8px; margin-right: 10px; font-family: monospace; }
+        #log { background: #000; padding: 15px; border-radius: 5px; height: 400px; overflow-y: scroll; }
+        .update { color: #4af626; }
+        .sys { color: #f6b926; }
+    </style>
+</head>
+<body>
+
+    <h2>Live Telemetry Monitor</h2>
+    <div class="controls">
+        <input type="text" id="tripId" placeholder="Trip ID (e.g. 1)" value="1">
+        <button onclick="joinTrip()">Join Trip Room</button>
+        <button onclick="leaveTrip()">Leave Trip Room</button>
+    </div>
+
+    <div id="log"></div>
+
+    <script>
+        const socket = io('http://localhost:3000');
+        const logDiv = document.getElementById('log');
+
+        function log(msg, type = 'sys') {
+            const el = document.createElement('div');
+            el.className = type;
+            el.innerText = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            logDiv.appendChild(el);
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        socket.on('connect', () => {
+            log(`Connected to Socket.IO Server (ID: ${socket.id})`);
+        });
+
+        socket.on('disconnect', () => {
+            log('Disconnected from server');
+        });
+
+        socket.on('bus_location_update', (data) => {
+            log(`Location Update: Trip ${data.tripId} | Lat: ${data.latitude}, Lng: ${data.longitude} | Speed: ${data.speed} km/h`, 'update');
+        });
+
+        function joinTrip() {
+            const id = document.getElementById('tripId').value;
+            if(!id) return;
+            socket.emit('join_trip', id);
+            log(`Requested to join trip:${id}`);
+        }
+
+        function leaveTrip() {
+            // Note: Our socket handler currently only implemented leave_route, but we'll disconnect or just ignore for demo.
+            log(`Leaving trip room not explicitly implemented, but you can reload.`);
+        }
+    </script>
+
+</body>
+</html>

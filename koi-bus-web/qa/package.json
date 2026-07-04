@@ -1,0 +1,29 @@
+{
+  "name": "qa",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "qa": "npx playwright test e2e/",
+    "qa:e2e": "npx playwright test e2e/",
+    "qa:chaos": "npx playwright test chaos/",
+    "qa:performance": "npx playwright test performance/",
+    "qa:security": "npx playwright test security/"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.61.1",
+    "@prisma/client": "^7.8.0",
+    "@types/node": "^26.1.0",
+    "@types/ws": "^8.18.1",
+    "axios": "^1.18.1",
+    "dotenv": "^17.4.2",
+    "redis": "^6.1.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.3",
+    "ws": "^8.21.0"
+  }
+}

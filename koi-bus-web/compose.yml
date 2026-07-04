@@ -1,0 +1,24 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: koi_bus_db_20_06
+    environment:
+      POSTGRES_DB: koi_bus_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: koi_pass_1234
+    ports:
+      - "15432:5432"
+    volumes:
+      - koi_postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    container_name: koi_bus_redis
+    ports:
+      - "16379:6379"
+    volumes:
+      - koi_redis_data:/data
+
+volumes:
+  koi_postgres_data:
+  koi_redis_data:

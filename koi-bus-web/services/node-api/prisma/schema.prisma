@@ -1,0 +1,452 @@
+generator client {
+  provider = "prisma-client-js"
+  engineType = "binary"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Operator {
+  id        Int      @id @default(autoincrement())
+  code      String   @unique
+  name      String
+  type      OperatorType
+  routes    Route[]
+  buses     Bus[]
+  users     User[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdBy Int?
+  updatedBy Int?
+}
+
+enum OperatorType {
+  WBTC
+  CSTC
+  SBSTC
+  NBSTC
+  PRIVATE
+}
+
+model Route {
+  id          Int      @id @default(autoincrement())
+  operatorId  Int
+  code        String
+  name        String
+  isActive    Boolean  @default(true)
+
+  operator    Operator @relation(fields: [operatorId], references: [id])
+  versions    RouteVersion[]
+  buses       Bus[]
+  reports     Report[]
+  trips       Trip[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdBy   Int?
+  updatedBy   Int?
+}
+
+model RouteVersion {
+  id          Int      @id @default(autoincrement())
+  routeId     Int
+  version     Int
+  validFrom   DateTime @default(now())
+  validTo     DateTime?
+
+  route       Route    @relation(fields: [routeId], references: [id])
+  routeStops  RouteStop[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdBy   Int?
+  updatedBy   Int?
+}
+
+model Stop {
+  id              Int      @id @default(autoincrement())
+  name            String
+  latitude        Float
+  longitude       Float
+  city            String
+  osmId           String?
+  geohash         String?
+
+  routeStops      RouteStop[]
+  connectionsFrom StopConnection[] @relation("StopFrom")
+  connectionsTo   StopConnection[] @relation("StopTo")
+  reports         Report[]
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  createdBy       Int?
+  updatedBy       Int?
+}
+
+model RouteStop {
+  routeVersionId Int
+  stopId         Int
+  sequence       Int
+  distanceKm     Float
+
+  routeVersion   RouteVersion @relation(fields: [routeVersionId], references: [id])
+  stop           Stop         @relation(fields: [stopId], references: [id])
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  createdBy      Int?
+  updatedBy      Int?
+
+  @@id([routeVersionId, stopId])
+}
+
+model StopConnection {
+  id               Int              @id @default(autoincrement())
+  fromStopId       Int
+  toStopId         Int
+  routeId          Int?
+
+  direction        RouteDirection?
+  edgeType         EdgeType         @default(ROUTE)
+  serviceType      ServiceType?
+
+  // For transfer edges
+  fromRouteId      Int?
+  toRouteId        Int?
+
+  distanceMeters   Float
+  estimatedMinutes Int?
+  transferCost     Int?
+  fareAmount       Float?
+
+  fromStop         Stop     @relation("StopFrom", fields: [fromStopId], references: [id])
+  toStop           Stop     @relation("StopTo", fields: [toStopId], references: [id])
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  createdBy        Int?
+  updatedBy        Int?
+
+  @@index([fromStopId])
+  @@index([toStopId])
+  @@index([fromStopId, toStopId])
+  @@index([routeId])
+}
+
+model Trip {
+  id        Int      @id @default(autoincrement())
+  routeId   Int
+  startTime DateTime
+  endTime   DateTime?
+  busType   BusType
+  status    TripStatus @default(SCHEDULED)
+
+  route     Route    @relation(fields: [routeId], references: [id])
+  locations TripLocation[]
+  assignments TripAssignment[]
+  sessions    ActiveTripSession[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdBy Int?
+  updatedBy Int?
+}
+
+model Fare {
+  id         Int      @id @default(autoincrement())
+  fromStopId Int
+  toStopId   Int
+  amount     Float
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  createdBy  Int?
+  updatedBy  Int?
+}
+
+model Bus {
+  id                 Int      @id @default(autoincrement())
+  registrationNumber String   @unique
+  routeId            Int
+  operatorId         Int?
+
+  route              Route    @relation(fields: [routeId], references: [id])
+  operator           Operator? @relation(fields: [operatorId], references: [id])
+  devices            Device[]
+  assignments        TripAssignment[]
+
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  createdBy          Int?
+  updatedBy          Int?
+}
+
+model TripLocation {
+  id            BigInt   @id @default(autoincrement())
+  tripId        Int
+  sessionId     Int?
+  latitude      Float
+  longitude     Float
+  speed         Float?
+  heading       Float?
+  accuracy      Float?
+  capturedAt    DateTime
+
+  createdAt     DateTime @default(now())
+
+  trip          Trip     @relation(fields: [tripId], references: [id])
+  session       ActiveTripSession? @relation(fields: [sessionId], references: [id])
+
+  @@index([tripId, capturedAt])
+  @@index([sessionId])
+}
+
+model Device {
+  id              Int @id @default(autoincrement())
+  serialNumber    String @unique
+  busId           Int?
+  isActive        Boolean @default(true)
+
+  bus             Bus? @relation(fields: [busId], references: [id])
+  assignments     TripAssignment[]
+}
+
+enum UserRole {
+  SUPER_ADMIN
+  BUS_OWNER
+  DRIVER
+  PASSENGER
+}
+
+model User {
+  id            Int @id @default(autoincrement())
+  email         String? @unique
+  phone         String @unique
+  passwordHash  String
+  firstName     String?
+  lastName      String?
+  role          UserRole
+  isActive      Boolean @default(true)
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  driver        Driver?
+  profile       UserProfile?
+  refreshTokens RefreshToken[]
+  sessions      UserSession[]
+  operatorId    Int?
+  operator      Operator? @relation(fields: [operatorId], references: [id])
+}
+
+model UserProfile {
+  id                Int @id @default(autoincrement())
+  userId            Int @unique
+  avatarUrl         String?
+  address           String?
+  emergencyContact  String?
+
+  user              User @relation(fields:[userId], references:[id])
+}
+
+model RefreshToken {
+  id            Int @id @default(autoincrement())
+  tokenHash     String
+  userId        Int
+  expiresAt     DateTime
+  revokedAt     DateTime?
+  replacedBy    String?
+  createdAt     DateTime @default(now())
+
+  user          User @relation(fields:[userId], references:[id])
+
+  @@index([userId])
+}
+
+model UserSession {
+  id             Int @id @default(autoincrement())
+  userId         Int
+  refreshTokenId Int
+  ipAddress      String?
+  userAgent      String?
+  deviceName     String?
+  lastSeenAt     DateTime @default(now())
+  createdAt      DateTime @default(now())
+
+  user           User @relation(fields:[userId], references:[id])
+
+  @@index([userId])
+}
+
+model Driver {
+  id            Int @id @default(autoincrement())
+  userId        Int @unique
+  licenseNo     String?
+  joinedAt      DateTime @default(now())
+
+  user          User @relation(fields: [userId], references: [id])
+  assignments   TripAssignment[]
+}
+
+enum TripStatus {
+  SCHEDULED
+  ONGOING
+  COMPLETED
+  CANCELLED
+}
+
+model ImportJob {
+  id        Int      @id @default(autoincrement())
+  source    String
+  status    String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdBy Int?
+  updatedBy Int?
+}
+
+model Report {
+  id          Int          @id @default(autoincrement())
+  type        ReportType
+  stopId      Int?
+  routeId     Int?
+  description String?
+  status      ReportStatus
+
+  stop        Stop?        @relation(fields: [stopId], references: [id])
+  route       Route?       @relation(fields: [routeId], references: [id])
+
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  createdBy   Int?
+  updatedBy   Int?
+}
+
+enum ReportType {
+  BUS_MISSING
+  ROUTE_CHANGED
+  ACCIDENT
+  DIVERSION
+  DELAY
+}
+
+enum ReportStatus {
+  PENDING
+  REVIEWED
+  RESOLVED
+}
+
+model OccupancyReport {
+  id             Int            @id @default(autoincrement())
+  routeId        Int
+  occupancyLevel OccupancyLevel
+  reportedAt     DateTime       @default(now())
+
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  createdBy      Int?
+  updatedBy      Int?
+}
+
+enum OccupancyLevel {
+  EMPTY
+  MODERATE
+  CROWDED
+  FULL
+}
+
+model SavedJourney {
+  id                Int      @id @default(autoincrement())
+  name              String
+  sourceStopId      Int
+  destinationStopId Int
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  createdBy         Int?
+  updatedBy         Int?
+}
+
+model Metadata {
+  id           Int      @id @default(autoincrement())
+  dataVersion  String
+  osmVersion   String?
+  routeVersion String?
+  stopCount    Int
+  routeCount   Int
+  edgeCount    Int
+  generatedAt  DateTime
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  createdBy    Int?
+  updatedBy    Int?
+}
+
+enum BusType {
+  LOCAL
+  EXPRESS
+  AC
+  SUPER
+}
+
+enum RouteDirection {
+  FORWARD
+  REVERSE
+}
+
+enum EdgeType {
+  ROUTE
+  TRANSFER
+  WALKING
+}
+
+enum ServiceType {
+  LOCAL
+  EXPRESS
+  AC
+  SUPER
+}
+
+model TripAssignment {
+  id           Int       @id @default(autoincrement())
+  tripId       Int
+  driverId     Int?
+  busId        Int?
+  deviceId     Int?
+  assignedBy   Int?
+  
+  assignedAt   DateTime  @default(now())
+  unassignedAt DateTime?
+  isActive     Boolean   @default(true)
+
+  trip         Trip      @relation(fields: [tripId], references: [id])
+  driver       Driver?   @relation(fields: [driverId], references: [id])
+  bus          Bus?      @relation(fields: [busId], references: [id])
+  device       Device?   @relation(fields: [deviceId], references: [id])
+  
+  @@index([tripId, isActive])
+}
+
+model ActiveTripSession {
+  id             Int        @id @default(autoincrement())
+  sessionUuid    String     @unique @default(uuid())
+  tripId         Int
+  status         TripStatus
+  startTime      DateTime   @default(now())
+  endTime        DateTime?
+  lastSeenAt     DateTime   @default(now())
+  
+  distanceMeters Float?     @default(0)
+  telemetryCount Int        @default(0)
+  averageSpeed   Float?
+
+  trip           Trip       @relation(fields: [tripId], references: [id])
+  locations      TripLocation[]
+
+  @@index([tripId, status])
+}
