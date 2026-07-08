@@ -1,20 +1,24 @@
 @echo off
 setlocal
+:: Ensure script runs in its own directory
+cd /d "%~dp0"
+
 echo ==============================================
 echo       Starting Koi Bus Servers (Windows)
 echo ==============================================
 
 :: Always stop existing servers first to prevent EADDRINUSE crashes
-call stop_servers.bat
+call "%~dp0stop_servers.bat"
 
 echo.
 echo [1/5] Checking Docker / Podman...
 set CONTAINER_ENGINE=
 where docker >nul 2>&1
 if %errorlevel% equ 0 set CONTAINER_ENGINE=docker
+
 if "%CONTAINER_ENGINE%"=="" (
     where podman >nul 2>&1
-    if %errorlevel% equ 0 set CONTAINER_ENGINE=podman
+    if not errorlevel 1 set CONTAINER_ENGINE=podman
 )
 
 if "%CONTAINER_ENGINE%"=="" (
@@ -70,17 +74,17 @@ if not exist "apps\web\package.json" (
 )
 start "KoiBus - Web Portal" cmd /c "cd apps\web && npm run dev || pause"
 
-echo [5/5] Starting Python Analytics & Importer...
-if not exist "..\python-analytics\venv\Scripts\python.exe" (
+echo [5/5] Starting Python Analytics and Importer...
+if not exist "python-analytics\venv\Scripts\python.exe" (
     echo [ERROR] Virtual environment for Analytics not found.
 ) else (
-    start "KoiBus - Analytics" cmd /c "cd ..\python-analytics && .\venv\Scripts\python.exe manage.py runserver 0.0.0.0:8001 || pause"
+    start "KoiBus - Analytics" cmd /c "cd python-analytics && .\venv\Scripts\python.exe manage.py runserver 0.0.0.0:8001 || pause"
 )
 
-if not exist "..\python-importer\venv\Scripts\python.exe" (
+if not exist "python-importer\venv\Scripts\python.exe" (
     echo [ERROR] Virtual environment for Importer not found.
 ) else (
-    start "KoiBus - Importer" cmd /c "cd ..\python-importer && .\venv\Scripts\python.exe manage.py runserver 0.0.0.0:8002 || pause"
+    start "KoiBus - Importer" cmd /c "cd python-importer && .\venv\Scripts\python.exe manage.py runserver 0.0.0.0:8002 || pause"
 )
 
 echo.

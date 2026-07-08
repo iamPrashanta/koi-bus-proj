@@ -26,11 +26,13 @@ fi
 echo "Using $CONTAINER_ENGINE..."
 if ! $CONTAINER_ENGINE info > /dev/null 2>&1; then
     echo "[WARNING] $CONTAINER_ENGINE daemon is not running!"
-    echo "Attempting to start it via systemctl..."
-    if command -v systemctl &> /dev/null; then
-        sudo systemctl start $CONTAINER_ENGINE || { echo "[ERROR] Failed to start $CONTAINER_ENGINE. Please start manually."; exit 1; }
+    echo "Attempting to start it via systemctl or service (WSL)..."
+    if command -v systemctl &> /dev/null && systemctl list-units &> /dev/null; then
+        sudo systemctl start $CONTAINER_ENGINE || { echo "[ERROR] Failed to start $CONTAINER_ENGINE via systemctl."; exit 1; }
+    elif command -v service &> /dev/null; then
+        sudo service $CONTAINER_ENGINE start || { echo "[ERROR] Failed to start $CONTAINER_ENGINE via service."; exit 1; }
     else
-        echo "[ERROR] systemd not found. Please start $CONTAINER_ENGINE manually."
+        echo "[ERROR] Neither systemd nor service command found. Please start $CONTAINER_ENGINE manually."
         exit 1
     fi
 fi

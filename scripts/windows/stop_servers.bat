@@ -1,5 +1,8 @@
 @echo off
 setlocal
+:: Ensure script runs in its own directory
+cd /d "%~dp0"
+
 echo ==============================================
 echo       Stopping Koi Bus Servers (Windows)
 echo ==============================================
@@ -33,9 +36,10 @@ cd ..\..\koi-bus-web
 set CONTAINER_ENGINE=
 where docker >nul 2>&1
 if %errorlevel% equ 0 set CONTAINER_ENGINE=docker
+
 if "%CONTAINER_ENGINE%"=="" (
     where podman >nul 2>&1
-    if %errorlevel% equ 0 set CONTAINER_ENGINE=podman
+    if not errorlevel 1 set CONTAINER_ENGINE=podman
 )
 
 if not "%CONTAINER_ENGINE%"=="" (

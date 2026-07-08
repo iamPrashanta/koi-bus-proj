@@ -1,5 +1,8 @@
 @echo off
 setlocal
+:: Ensure script runs in its own directory
+cd /d "%~dp0"
+
 echo ==============================================
 echo          Building Koi Bus APK (Windows)
 echo ==============================================
