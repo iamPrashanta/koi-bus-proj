@@ -65,17 +65,17 @@ fi
 WEB_PID=$!
 
 echo "[5/5] Starting Python Analytics & Importer..."
-if [ ! -f "../../python-analytics/venv/bin/activate" ]; then
+if [ ! -f "python-analytics/venv/bin/activate" ]; then
     echo "[ERROR] venv not found for Analytics."
 else
-    (cd ../../python-analytics && source venv/bin/activate && python manage.py runserver 0.0.0.0:8001) &
+    (cd python-analytics && source venv/bin/activate && python manage.py runserver 0.0.0.0:8001) &
     ANALYTICS_PID=$!
 fi
 
-if [ ! -f "../../python-importer/venv/bin/activate" ]; then
+if [ ! -f "python-importer/venv/bin/activate" ]; then
     echo "[ERROR] venv not found for Importer."
 else
-    (cd ../../python-importer && source venv/bin/activate && python manage.py runserver 0.0.0.0:8002) &
+    (cd python-importer && source venv/bin/activate && python manage.py runserver 0.0.0.0:8002) &
     IMPORTER_PID=$!
 fi
 

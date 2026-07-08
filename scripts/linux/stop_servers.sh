@@ -3,6 +3,9 @@ echo "=============================================="
 echo "      Stopping Koi Bus Servers (Linux)"
 echo "=============================================="
 
+# Ensure script is run from its directory
+cd "$(dirname "$0")"
+
 # Helper function to kill by port robustly
 kill_port() {
     local port=$1

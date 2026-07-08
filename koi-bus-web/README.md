@@ -135,22 +135,24 @@ koi-bus/
 
 ## Quick Start
 
-### Windows (PowerShell)
+We have built automated orchestration scripts in the **project root** to manage all backend services and containers simultaneously. You no longer need to start the databases or services manually.
 
-```powershell
-.\start.ps1           # Start all services
-.\start.ps1 -Stop     # Stop all services
-.\start.ps1 -Status   # Check running status
+1. Navigate back to the **project root directory** (`cd ..`).
+2. Run the automated orchestration script for your OS:
+
+**Windows Native (CMD / PowerShell):**
+```cmd
+.\scripts\windows\start_servers.bat
 ```
 
-### Linux / macOS
-
+**Linux (Arch, Ubuntu, Fedora):**
 ```bash
-chmod +x start.sh
-./start.sh            # Start all services
-./start.sh --stop     # Stop all services
-./start.sh --status   # Check running status
+./scripts/linux/start_servers.sh
 ```
+
+These scripts will automatically check your container engine, boot PostgreSQL and Redis, and launch the Node.js API, Next.js Web Portal, and Python Microservices.
+
+> **Note:** To shut everything down (including the databases), use the `stop_servers.bat` or `stop_servers.sh` scripts located in the same folders.
 
 The launcher starts services in this order:
 

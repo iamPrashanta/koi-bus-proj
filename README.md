@@ -29,23 +29,45 @@ The cross-platform mobile application built with Flutter.
 
 ## 🚀 Quick Start Overview
 
-To get the full stack running locally, you generally need to start the web backend first, followed by the mobile app.
+We have built fully automated orchestration scripts located in the `scripts/` directory to manage all backend services and mobile compilation simultaneously. 
 
-1. **Start the Database Containers** (in `koi-bus-web`)
+### Windows Native (CMD / PowerShell)
+If you are developing on a Windows machine, do **not** use WSL. Use the provided batch scripts which automatically configure ports, detect Docker/Podman, and open the Node/Python servers in separate windows.
+```cmd
+# Boot up the database and all 4 backend servers
+.\scripts\windows\start_servers.bat
+
+# Safely kill all servers and shut down the database containers
+.\scripts\windows\stop_servers.bat
+
+# Compile the Flutter APK (with automated pathing bugfixes)
+.\scripts\windows\build_apk.bat
+```
+
+### Linux (Arch, Ubuntu, Fedora)
+The project ships with POSIX-compliant shell scripts designed to run on any native Linux installation. 
+
+If you want to run this natively on **Arch Linux** (or any other distro):
+1. **Transfer the Code:** Clone or copy this repository to your Linux machine.
+2. **Install Prerequisites:** Ensure the core tooling is installed. For example, on Arch:
    ```bash
-   cd koi-bus-web
-   podman compose up -d
+   sudo pacman -S nodejs npm python python-pip docker podman lsof psmisc
    ```
-2. **Start the API & Web Portals** (in `koi-bus-web`)
+   *(Note: You will also need to install the Flutter SDK if you plan on compiling the APK).*
+3. **Make Scripts Executable:** Ensure the scripts have run permissions:
    ```bash
-   ./start.sh
-   # Or on Windows: .\start.ps1
+   chmod +x scripts/linux/*.sh
    ```
-3. **Run the Mobile App** (in `koi-bus-apk`)
+4. **Run the Orchestration:** The scripts will automatically detect your service manager (`systemctl`) and launch everything in the background.
    ```bash
-   cd ../koi-bus-apk
-   flutter pub get
-   flutter run
+   # Boot up database and all backend servers in the background
+   ./scripts/linux/start_servers.sh
+
+   # Safely terminate all background servers and containers
+   ./scripts/linux/stop_servers.sh
+   
+   # Compile the Flutter APK
+   ./scripts/linux/build_apk.sh
    ```
 
 *See the individual README files linked above for detailed, step-by-step installation instructions and environment variable templates.*

@@ -45,7 +45,7 @@ The app automatically configures its base URL depending on your environment:
 - **Android Emulator:** `http://10.0.2.2:4000`
 - **iOS Simulator:** `http://localhost:4000`
 
-If you are running on a **Physical Device**, you must update the `_host` variable in `lib/core/api/api_config.dart` to point to your computer's local IP address (e.g., `192.168.1.100`).
+If you are running on a **Physical Device** (as we do for production testing), we have hardcoded the `ApiConfig.baseUrl` in `lib/core/api/api_config.dart` to point to the local Wi-Fi host IP (`192.168.1.5`). Ensure your testing device is on the same network.
 
 ### 3. Run the App
 
@@ -57,19 +57,13 @@ flutter run
 
 ## Testing the API Integration
 
-To test the live tracking and login flows, you must have the **Web Project** services running first:
+To test the live tracking, login flows, and Python Microservices, you must have the backend services running:
 
-1. Start the backend services in the `koi-bus-web` directory (`podman compose up -d` and `npm run dev` in `services/node-api`).
-2. Run the Flutter app in an Android emulator.
+1. Go to the project root and run `.\scripts\windows\start_servers.bat` (or `.sh` on Linux). This automatically boots the databases, Node API (4000), Next.js Web (4001), Python Analytics (8001), and Python Importer (8002).
+2. Run the Flutter app on your device or emulator.
 3. Log in with a test account (e.g., Phone: `4444444444`, Password: `password123`).
-4. Navigate to the **Live** tab to see real-time Socket.IO telemetry streaming.
-
-### Python Microservices Check
-
-To verify the app can talk to the Django Python services:
-1. Start the Python Analytics (Port 8001) and Importer (Port 8002) services in the `koi-bus-web` directory.
-2. In the Flutter app, navigate to the **DB Health** tab.
-3. Scroll to the bottom and tap **Ping** on both services.
+4. Navigate to the **Live** tab to see real-time Socket.IO telemetry and cached map tiles.
+5. Navigate to the **DB Health** tab to ping the running Python Microservices directly.
 
 ---
 
@@ -77,7 +71,16 @@ To verify the app can talk to the Django Python services:
 
 ### Android APK
 
-```bash
-flutter build apk --release
+Because of a known Kotlin incremental compiler bug on Windows (when crossing drives), you should **always** build the APK using our automated script from the project root:
+
+**Windows:**
+```cmd
+.\scripts\windows\build_apk.bat
 ```
-The output file will be located at `build/app/outputs/flutter-apk/app-release.apk`.
+
+**Linux:**
+```bash
+./scripts/linux/build_apk.sh
+```
+
+This script sets a local `PUB_CACHE` and safely compiles the app. The output file will be located at `build/app/outputs/flutter-apk/app-release.apk`.
